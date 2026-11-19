@@ -1,0 +1,23 @@
+{
+  "summary": {
+    "first_date": "2010-01-04",
+    "last_date": "2026-11-17",
+    "years": 16.9,
+    "trading_days": 4138,
+    "mean_spread": 6.05,
+    "median_spread": 4.51,
+    "max_spread": 54.34,
+    "max_spread_date": "2020-04-20",
+    "min_spread": -5.66,
+    "min_spread_date": "2020-03-31"
+  },
+  "dislocation_episodes": 218,
+  "backtest": {
+    "entry_z": 2.0,
+    "exit_z": 0.5,
+    "num_trades": 102,
+    "hit_rate_pct": 91.2,
+    "avg_trade_pnl": 2.27,
+    "total_pnl_per_bbl": 231.77
+  }
+}
