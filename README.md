@@ -25,6 +25,7 @@ Daily spot prices from the U.S. Energy Information Administration (EIA):
 - Dislocation episodes (|z| > 2): 218
 - 2026 peak: $37.62 on 2026-10-02, the largest since April 2020
 - Backtest: 102 trades, 91.2% hit rate, average $2.27/bbl per trade, median holding period 11 trading days
+- Risk: annualized Sharpe of 0.69 on daily PnL; max drawdown −$22.57/bbl, all on a single day (2026-10-01 to 10-02) during the Dated Brent squeeze
 - Robustness: excluding March–June 2020 cuts total PnL from $231.77 to $166.77/bbl; hit rate was 85.5% before 2020 and 97.4% after
 - Daily spread changes have a lag 1 autocorrelation of −0.35, so much of the "edge" is day to day noise reversing
 
@@ -43,13 +44,14 @@ Daily spot prices from the U.S. Energy Information Administration (EIA):
 
 **Spot vs. futures.** In early October 2026 the futures spread was roughly $11 to $13, while the EIA spot spread was above $30. Spot Brent reflects physical North Sea cargoes, which were squeezed far harder than the futures contract. The two measures can tell very different stories during a crisis.
 
-**The backtest is too good to trust.** A 91% hit rate looks impressive, but daily spread changes have a −0.35 autocorrelation: a move one day tends to reverse the next. Brent and WTI spot prices are assessed at different times and places, so part of what the rule "trades" is timing noise, not a real opportunity. Removing March–June 2020 alone cuts total PnL by 28%. A real test would use futures, include transaction and roll costs, and tune parameters out of sample.
+**The backtest is too good to trust, and the risk numbers show why.** A 91% hit rate came with a Sharpe of only 0.69, because the few losses were large: the worst single day (−$22.57/bbl) erased the profit of about ten average trades. Daily spread changes have a −0.35 autocorrelation: a move one day tends to reverse the next. Brent and WTI spot prices are assessed at different times and places, so part of what the rule "trades" is timing noise, not a real opportunity. Removing March–June 2020 alone cuts total PnL by 28%. A real test would use futures, include transaction and roll costs, and tune parameters out of sample.
 
 ## Limitations
 - Spot prices can't be traded directly; a real trade would use futures (and roll costs)
 - No transaction costs, slippage, or position sizing
 - Parameters (60-day window, ±2 entry) were not optimized out of sample
 - Extreme days like April 2020 dominate the statistics
+- Sharpe is computed on daily PnL in $/bbl with no capital base, so it measures consistency, not return on capital
 - Brent and WTI spot prices are assessed at different times of day, which creates noise that reverses the next day; a strong negative autocorrelation (−0.35) suggests the backtest overstates any real, tradable edge
 
 ## Run it

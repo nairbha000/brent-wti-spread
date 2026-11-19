@@ -18,6 +18,12 @@
     "num_trades": 102,
     "hit_rate_pct": 91.2,
     "avg_trade_pnl": 2.27,
-    "total_pnl_per_bbl": 231.77
+    "total_pnl_per_bbl": 231.77,
+    "max_drawdown_per_bbl": -22.57,
+    "max_drawdown_start": "2026-10-01",
+    "max_drawdown_trough": "2026-10-02",
+    "sharpe_annualized": 0.69,
+    "worst_day_per_bbl": -22.57,
+    "best_day_per_bbl": 54.13
   }
 }

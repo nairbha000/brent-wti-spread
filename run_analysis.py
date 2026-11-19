@@ -12,6 +12,7 @@ from pathlib import Path
 
 from spread_analysis.analysis import add_rolling_stats, add_spread, find_dislocations, summary_stats
 from spread_analysis.backtest import run_backtest
+from spread_analysis.risk import risk_metrics
 from spread_analysis.data import load_prices
 from spread_analysis.plots import plot_prices, plot_spread, plot_zscore_and_pnl
 
@@ -43,6 +44,7 @@ def main():
     plot_zscore_and_pnl(df, args.entry, out / "zscore_pnl.png")
     episodes.to_csv(out / "dislocations.csv", index=False)
 
+    bt.update(risk_metrics(df["daily_pnl"]))
     results = {"summary": summary_stats(df), "dislocation_episodes": int(len(episodes)), "backtest": bt}
     (out / "results.json").write_text(json.dumps(results, indent=2))
     print(json.dumps(results, indent=2))
