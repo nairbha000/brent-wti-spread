@@ -12,7 +12,7 @@ from pathlib import Path
 
 from spread_analysis.analysis import add_rolling_stats, add_spread, find_dislocations, summary_stats
 from spread_analysis.backtest import run_backtest
-from spread_analysis.risk import risk_metrics
+from spread_analysis.risk import autocorr_by_year, risk_metrics
 from spread_analysis.data import load_prices
 from spread_analysis.plots import plot_prices, plot_spread, plot_zscore_and_pnl
 
@@ -45,7 +45,8 @@ def main():
     episodes.to_csv(out / "dislocations.csv", index=False)
 
     bt.update(risk_metrics(df["daily_pnl"]))
-    results = {"summary": summary_stats(df), "dislocation_episodes": int(len(episodes)), "backtest": bt}
+    results = {"summary": summary_stats(df), "dislocation_episodes": int(len(episodes)), "backtest": bt,
+               "autocorrelation": autocorr_by_year(df["spread"])}
     (out / "results.json").write_text(json.dumps(results, indent=2))
     print(json.dumps(results, indent=2))
     print(f"\nTop 5 dislocations by |peak z|:\n{episodes.reindex(episodes['peak_z'].abs().sort_values(ascending=False).index).head()}")

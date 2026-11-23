@@ -23,3 +23,17 @@ def test_risk_metrics_keys():
     idx = pd.bdate_range("2024-01-01", periods=50)
     m = risk_metrics(pd.Series(np.linspace(-1, 1, 50), index=idx))
     assert set(m) >= {"max_drawdown_per_bbl", "sharpe_annualized", "worst_day_per_bbl"}
+
+
+def test_autocorr_by_year_detects_reversal():
+    import numpy as np
+    import pandas as pd
+    from spread_analysis.risk import autocorr_by_year
+    idx = pd.bdate_range("2018-01-01", "2020-12-31")
+    rng = np.random.default_rng(0)
+    true = np.cumsum(rng.normal(0, 0.1, len(idx)))
+    noisy = pd.Series(true + rng.normal(0, 1.0, len(idx)), index=idx)  # i.i.d. measurement error
+    res = autocorr_by_year(noisy)
+    assert res["years_tested"] == 3
+    assert res["years_negative"] == 3
+    assert res["overall"] < -0.3

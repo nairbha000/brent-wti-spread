@@ -34,3 +34,22 @@ def risk_metrics(pnl: pd.Series) -> dict:
         "worst_day_per_bbl": round(float(pnl.min()), 2),
         "best_day_per_bbl": round(float(pnl.max()), 2),
     }
+
+
+def autocorr_by_year(spread: pd.Series, exclude: tuple[str, str] | None = ("2020-03-01", "2020-06-30")) -> dict:
+    """Lag-one autocorrelation of daily spread changes: overall, excluding a stress window, and per calendar year.
+
+    A consistently negative value means a move one day tends to reverse the next. If it holds in every
+    year, a few outlier days cannot explain it, which points to a structural cause such as Brent and WTI
+    spot prices being assessed at different times (nonsynchronous pricing).
+    """
+    d = spread.diff().dropna()
+    out = {"overall": round(float(d.autocorr(1)), 3)}
+    if exclude:
+        keep = (d.index < exclude[0]) | (d.index > exclude[1])
+        out["excluding_window"] = round(float(d[keep].autocorr(1)), 3)
+    years = {str(y): round(float(g.autocorr(1)), 3) for y, g in d.groupby(d.index.year) if len(g) > 20}
+    out["by_year"] = years
+    out["years_negative"] = int(sum(v < 0 for v in years.values()))
+    out["years_tested"] = len(years)
+    return out
